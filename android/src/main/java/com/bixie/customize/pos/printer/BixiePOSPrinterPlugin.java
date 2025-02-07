@@ -19,4 +19,13 @@ public class BixiePOSPrinterPlugin extends Plugin {
         ret.put("value", implementation.echo(value));
         call.resolve(ret);
     }
+
+    @PluginMethod
+    public void SamplePrinter(PluginCall call) {
+        String value = call.getString("name");
+
+        JSObject ret = new JSObject();
+        ret.put("value", implementation.echo(value));
+        call.resolve(ret);
+    }
 }
