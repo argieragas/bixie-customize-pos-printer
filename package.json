@@ -1,6 +1,6 @@
 {
   "name": "bixie-customize-pos-printer",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "Customize Bixie printer plugin",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

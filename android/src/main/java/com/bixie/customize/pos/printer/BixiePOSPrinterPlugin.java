@@ -28,4 +28,12 @@ public class BixiePOSPrinterPlugin extends Plugin {
         ret.put("value", implementation.echo(value));
         call.resolve(ret);
     }
+
+    @PluginMethod
+    public void Image(PluginCall call) {
+        Bitmap value = call.getString("image");
+        JSObject ret = new JSObject();
+        ret.put("value", implementation.echo(value));
+        call.resolve(ret);
+    }
 }
