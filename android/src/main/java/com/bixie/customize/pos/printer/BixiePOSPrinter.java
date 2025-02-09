@@ -25,11 +25,6 @@ public class BixiePOSPrinter {
         BluetoothDevice device = bluetoothAdapter.getRemoteDevice(deviceAddress);
         try {
             socket = device.createRfcommSocketToServiceRecord(uuid);
-            socket.connect();
-            String message = "Hello, " + deviceAddress + "!";
-            socket.getOutputStream().write(message.getBytes());
-            System.out.println("Connected to Bluetooth device");
-            object.put("success", "Connected to Bluetooth device");
         } catch (Exception e) {
             object.put("error", e.getMessage());
         }
