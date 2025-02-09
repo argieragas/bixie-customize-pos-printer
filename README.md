@@ -14,8 +14,8 @@ npx cap sync
 <docgen-index>
 
 * [`echo(...)`](#echo)
-* [`SamplePrinter(...)`](#sampleprinter)
-* [`Image(...)`](#image)
+* [`connectToDevice(...)`](#connecttodevice)
+* [`testPrint()`](#testprint)
 
 </docgen-index>
 
@@ -37,30 +37,26 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 --------------------
 
 
-### SamplePrinter(...)
+### connectToDevice(...)
 
 ```typescript
-SamplePrinter(options: { name: string; }) => Promise<{ value: string; }>
+connectToDevice(options: { address: string; }) => Promise<{ value: string; success: string; error: string; }>
 ```
 
-| Param         | Type                           |
-| ------------- | ------------------------------ |
-| **`options`** | <code>{ name: string; }</code> |
+| Param         | Type                              |
+| ------------- | --------------------------------- |
+| **`options`** | <code>{ address: string; }</code> |
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ value: string; success: string; error: string; }&gt;</code>
 
 --------------------
 
 
-### Image(...)
+### testPrint()
 
 ```typescript
-Image(options: { image: ImageData; }) => Promise<{ value: string; }>
+testPrint() => Promise<{ value: string; }>
 ```
-
-| Param         | Type                         |
-| ------------- | ---------------------------- |
-| **`options`** | <code>{ image: any; }</code> |
 
 **Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
 
