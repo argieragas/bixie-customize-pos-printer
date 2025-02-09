@@ -19,7 +19,7 @@ public class BluetoothPrinterHelper {
     public OutputStream outputStream;
     private BluetoothSocket socket;
     public Bitmap loadBitmapFromResource(Context context, int resourceId) {
-        return Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), resourceId), 150, 127, true);
+        return Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), resourceId), 384, 176, true);
     }
 
     public BluetoothPrinterHelper(BluetoothSocket socket) throws IOException {
