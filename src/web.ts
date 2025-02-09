@@ -6,7 +6,7 @@ export class BixiePOSPrinterWeb extends WebPlugin implements BixiePOSPrinterPlug
   SamplePrinter(options: { name: string; }): Promise<{ value: string; }> {
     throw new Error(`Method not implemented. ${options}`);
   }
-  Image(options: {image: ImageData}): Promise<{value: String; }> {
+  Image(options: {image: ImageData}): Promise<{value: string; }> {
     throw new Error(`Method not implemented. ${options}`);
   }
   async echo(options: { value: string }): Promise<{ value: string }> {

@@ -31,9 +31,25 @@ public class BixiePOSPrinterPlugin extends Plugin {
 
     @PluginMethod
     public void Image(PluginCall call) {
-        Bitmap value = call.getString("image");
+        String base64Image = call.getString("image");
+        if (base64Image == null) {
+            call.reject("Must provide a base64Image");
+            return;
+        }
+        String base64Data = base64Image.replaceFirst("data:image/[^;]+;base64,", "");
+        byte[] decodedBytes = Base64.decode(base64Data, Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+
+        if (bitmap == null) {
+            call.reject("Failed to decode image");
+            return;
+        }
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        String base64Return = Base64.encodeToString(byteArray, Base64.DEFAULT);
         JSObject ret = new JSObject();
-        ret.put("value", implementation.echo(value));
+        ret.put("value", base64Return);
         call.resolve(ret);
     }
 }
