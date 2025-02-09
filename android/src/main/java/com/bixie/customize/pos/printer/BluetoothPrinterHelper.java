@@ -1,4 +1,8 @@
+package com.bixie.customize.pos.printer;
+
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -6,23 +10,23 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.OutputStream;
 
+@SuppressLint("MissingPermission")
 public class BluetoothPrinterHelper {
 
     private static final String TAG = "BluetoothPrinter";
-    private final BluetoothSocket socket;
     public OutputStream outputStream;
+    private BluetoothSocket socket;
 
     public BluetoothPrinterHelper(BluetoothSocket socket) throws IOException {
         this.outputStream = socket.getOutputStream();
     }
 
-    public void printImage(int imageResId) throws IOException {
+    public void printImage(int imageResId, Context context) throws IOException {
         try {
             Bitmap bitmap = BitmapFactory.decodeResource(
                     context.getResources(),
                     imageResId
             );
-
             byte[] printerBytes = convertBitmapToPrinterFormat(bitmap);
 
             byte[] printerCommands = new byte[]{
@@ -81,7 +85,11 @@ public class BluetoothPrinterHelper {
     }
 
     public void open() {
-        socket.connect();
+        try {
+            socket.connect();
+        } catch (IOException e) {
+            Log.e(TAG, "Error opening socket", e);
+        }
     }
 
     public void close() {
