@@ -6,6 +6,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
+@SuppressLint("MissingPermission")
 @CapacitorPlugin(name = "BixiePOSPrinter")
 public class BixiePOSPrinterPlugin extends Plugin {
 
@@ -21,35 +22,23 @@ public class BixiePOSPrinterPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void SamplePrinter(PluginCall call) {
-        String value = call.getString("name");
-
-        JSObject ret = new JSObject();
-        ret.put("value", implementation.echo(value));
+    public void connectToDevice(PluginCall call) {
+        String address = call.getString("address");
+        JSObject ret = implementation.connectToDevice(address);
         call.resolve(ret);
     }
 
     @PluginMethod
-    public void Image(PluginCall call) {
-        String base64Image = call.getString("image");
-        if (base64Image == null) {
-            call.reject("Must provide a base64Image");
-            return;
-        }
-        String base64Data = base64Image.replaceFirst("data:image/[^;]+;base64,", "");
-        byte[] decodedBytes = Base64.decode(base64Data, Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-
-        if (bitmap == null) {
-            call.reject("Failed to decode image");
-            return;
-        }
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        String base64Return = Base64.encodeToString(byteArray, Base64.DEFAULT);
+    public void testPrint(PluginCall call) {
         JSObject ret = new JSObject();
-        ret.put("value", base64Return);
+        try {
+            BluetoothSocket socket = implementation.socket;
+            socket.connect();
+            socket.getOutputStream().write("Hello, World!".getBytes());
+        } catch (Exception e) {
+            ret.put("value", e.getMessage());
+        }
         call.resolve(ret);
     }
+
 }
