@@ -2,6 +2,8 @@ package com.bixie.customize.pos.printer;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothSocket;
+import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -43,11 +45,13 @@ public class BixiePOSPrinterPlugin extends Plugin {
     public void testPrint(PluginCall call) {
         JSObject ret = new JSObject();
         try {
-            BluetoothSocket socket = implementation.socket;
-            socket.connect();
-            socket.getOutputStream().write("Hello, World!".getBytes());
+            helper.open();
+            helper.outputStream.write("Hello, World!\n\n\n".getBytes());
             helper.printImage(R.drawable.header, getContext());
+            helper.close();
+            ret.put("value", "success");
         } catch (Exception e) {
+            Log.i("testPrint", e.getMessage());
             ret.put("value", e.getMessage());
         }
         call.resolve(ret);
