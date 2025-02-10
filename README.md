@@ -16,6 +16,7 @@ npx cap sync
 * [`echo(...)`](#echo)
 * [`connectToDevice(...)`](#connecttodevice)
 * [`testPrint()`](#testprint)
+* [`printTicket(...)`](#printticket)
 
 </docgen-index>
 
@@ -59,6 +60,21 @@ testPrint() => Promise<{ value: string; }>
 ```
 
 **Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+--------------------
+
+
+### printTicket(...)
+
+```typescript
+printTicket(options: { firstName: string; drawDate: string; datePrinted: string; qrcode: string; games: string; total: string; drawTime: string; agentCode: string; maxSize: number; }) => Promise<{ success: string; error: string; }>
+```
+
+| Param         | Type                                                                                                                                                                           |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`options`** | <code>{ firstName: string; drawDate: string; datePrinted: string; qrcode: string; games: string; total: string; drawTime: string; agentCode: string; maxSize: number; }</code> |
+
+**Returns:** <code>Promise&lt;{ success: string; error: string; }&gt;</code>
 
 --------------------
 

@@ -37,7 +37,11 @@ public class BixiePOSPrinterPlugin extends Plugin {
     public void connectToDevice(PluginCall call) {
         String address = call.getString("address");
         JSObject ret = implementation.connectToDevice(address);
-        printer = new EscPosPrinter(implementation.deviceConnection, 203, 48f, 32);
+        try {
+            printer = new EscPosPrinter(implementation.deviceConnection, 203, 48f, 32);
+        } catch (EscPosConnectionException e) {
+            ret.put("error", e.getMessage());
+        }
         call.resolve(ret);
     }
 
@@ -50,10 +54,35 @@ public class BixiePOSPrinterPlugin extends Plugin {
             String datePrinted = call.getString("datePrinted");
             String drawTime = call.getString("drawTime");
             String qrcode = call.getString("qrcode");
-            Srting games = call.getString("games");
+            String games = call.getString("games");
             String total = call.getString("total");
             String agentCode = call.getString("agentCode");
-            
+            int max = call.getInt("maxSize");
+
+            printer.printFormattedText(
+                    "[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.header), 384, 176, true))+"</img>\n"+
+                    "[L]\n"+
+                    "[L]<font style='margin-left:20px;'>AGENT :"+padStart(firstName)+" </font>\n" +
+                    "[L]<font>DATE  :"+padStart(drawDate)+"</font>\n"+
+                    "[L]<font>TIME  :"+padStart(datePrinted)+"</font>\n"+
+                    "[L]<font>DRAW  :"+padStart(drawTime)+"</font>\n"+
+                    "[L]<font>CODE  :"+padStart(qrcode)+"</font>\n"+
+                    "[L]<img>"+PrinterTextParserImg.bitmapToHexadecimalString(printer, gap(1))+"</img>\n"+
+                    "[L]<font>"+line(max)+"</font>\n"+
+                    "[L]<img>"+PrinterTextParserImg.bitmapToHexadecimalString(printer, gap(2))+"</img>\n"+
+                    "[L]<font>    Number  Amount      Win</font>\n"+
+                    "[L]<img>"+PrinterTextParserImg.bitmapToHexadecimalString(printer, gap(2))+"</img>\n"+
+                    "[L]<font>"+line(max)+"</font>\n"+
+                    "[L]<img>"+PrinterTextParserImg.bitmapToHexadecimalString(printer, gap(2))+"</img>\n"+
+                    "[L]<font>"+games+"</font>\n"+
+                    "[L]<img>"+PrinterTextParserImg.bitmapToHexadecimalString(printer, gap(2))+"</img>\n"+
+                    "[L]<font>"+line(max)+"</font>\n"+
+                    "[C]<font>Total:"+total+"</font>\n"+
+                    "[L]<img>"+PrinterTextParserImg.bitmapToHexadecimalString(printer, gap(15))+"</img>\n"+
+                    "[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.footer), 384, 144, true))+"</img>\n"+
+                    "[L]<img>"+PrinterTextParserImg.bitmapToHexadecimalString(printer, gap(30))+"</img>\n"+
+                    "[C]<qrcode size='15'>"+qrcode+"</qrcode>\n\n"+
+                    "[C]<font>"+agentCode+"</font>",80);
             ret.put("success","");
         } catch (Exception e) {
             ret.put("error", e.getMessage());
@@ -99,4 +128,13 @@ public class BixiePOSPrinterPlugin extends Plugin {
         call.resolve(ret);
     }
 
+    
+    public String padStart(String text) {
+        String str = "";
+        for(int i = 0; i < 16 - text.length(); i++) {
+            str += " ";
+        }
+        str += text;
+        return str;
+    }
 }
